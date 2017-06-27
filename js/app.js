@@ -5,11 +5,11 @@
 		// 创建模块
 		.module('todoApp', [])
 		// 创建控制器
-		.controller('TodoController', ['$scope', TodoController]);
+		.controller('TodoController', ['$scope', '$location', TodoController]);
 
 
 	// 控制器函数
-	function TodoController($scope) {
+	function TodoController($scope, $location) {
 		var vm = $scope; // vm 就是视图模型
 		// 代码写在此处！
 
@@ -165,7 +165,10 @@
 		// | filter: { isCompleted: undefined }
 		vm.status = undefined;
 
-		vm.showAll = function() {
+		// 因为单击每一个状态按钮的时候，都会修改 url中hash的值
+		// 只要 hash值 发生了变化，$watch() 就会监视到这个变化
+		// 然后, 在 $watch() 根据不同的hash值，设置不同的任务状态就可以了！
+		/*vm.showAll = function() {
 			vm.status = undefined;
 		};
 
@@ -175,7 +178,32 @@
 
 		vm.showCompleted = function() {
 			vm.status = true;
-		};
+		};*/
+
+		// 9 根据URL变化显示相应任务
+		// 思路：监视url中hash值的变化
+		// $scope.$watch()
+
+		// 通过 $location.url() 方法来获取到 hash 值（ / 或 /active 或 /completed ）
+
+		// 根据 hash 值，设置 stauts 的状态，然后，过滤器会自动将数据过滤初来
+		vm.location = $location;
+		vm.$watch('location.url()', function(curVal) {
+			switch(curVal) {
+				case '/active':
+					vm.status = false;	
+					break;
+				case '/completed':
+					vm.status = true;	
+					break;
+				default:
+					vm.status = undefined;	
+					break;
+			}
+		});
+
+		// window.location
+		// console.log($location.url());
 	}
 
 })(angular);
