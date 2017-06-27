@@ -107,7 +107,14 @@
 			}
 
 			// 将 未完成任务数组赋值给 vm，这样的话，vm中的 todoList 才会发生变化！
-			vm.todoList = tempArr;
+			// 注意：此处将 tempArr 赋值给 vm.todoList 就修改了 vm.todoList 的指向，
+			// 	     修改以后， todoList  和 vm.todoList 就不在是同一个数组
+			// vm.todoList = tempArr;
+			// todoList = vm.todoList;
+
+			// 清空数组（这种方式，不会改变vm.todoList的指向）
+			vm.todoList.length = 0;
+			[].push.apply(vm.todoList, tempArr);
 		};
 
 		// 6.1 处理清除任务按钮的显示和隐藏
