@@ -32,7 +32,7 @@
         <!-- 如果当前任务是完成的，那么就添加 completed 类；
              根据 todo.isCompleted 这个值来确定是否添加，这个值为true就添加，否则不添加
          -->
-        <li ng-repeat="todo in todoList track by $index" ng-class="{ completed: todo.isCompleted, editing: todo.id === editingId }">
+        <li ng-repeat="todo in todoList | filter: { isCompleted: status } track by $index" ng-class="{ completed: todo.isCompleted, editing: todo.id === editingId }">
           <div class="view">
             <input class="toggle" type="checkbox" ng-model="todo.isCompleted">
             <label ng-bind="todo.name" ng-dblclick="edit(todo.id)"></label>
@@ -49,17 +49,17 @@
     <!-- This footer should hidden by default and shown when there are todos -->
     <footer class="footer">
       <!-- This should be `0 items left` by default -->
-      <span class="todo-count"><strong>0</strong> item left</span>
+      <span class="todo-count"><strong ng-bind="getUnCompletedCount()">0</strong> item left</span>
       <!-- Remove this if you don't implement routing -->
       <ul class="filters">
         <li>
-          <a class="selected" href="#/">All</a>
+          <a ng-class="{ selected: status === undefined }" href="#/" ng-click="showAll()">All</a>
         </li>
         <li>
-          <a href="#/active">Active</a>
+          <a ng-class="{ selected: status === false }" href="#/active" ng-click="showActive()">Active</a>
         </li>
         <li>
-          <a href="#/completed">Completed</a>
+          <a ng-class="{ selected: status === true }" href="#/completed" ng-click="showCompleted()">Completed</a>
         </li>
       </ul>
       <!-- Hidden if no completed items are left ↓ -->

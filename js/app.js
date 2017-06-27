@@ -138,6 +138,44 @@
 			return ret;*/
 		};
 
+		// 7 显示未完成任务数
+		vm.getUnCompletedCount = function() {
+			/*var count = 0;
+			todoList.forEach(function(todo) {
+				if(!todo.isCompleted) {
+					count++;
+				}
+			});
+			return count;*/
+
+			return todoList.reduce(function(acc, todo) {
+				if(!todo.isCompleted) {
+					acc++;
+				}
+				return acc;
+			}, 0);
+		};
+
+		// 8 显示不同状态的任务
+    // 	 以及当前任务高亮处理
+		// 通过 angualr 中的过滤器来实现数据的过滤
+		// 展示已完成的任务： true
+		// 展示未完成的任务： false
+		// 展示所有的任务：  	undefined
+		// | filter: { isCompleted: undefined }
+		vm.status = undefined;
+
+		vm.showAll = function() {
+			vm.status = undefined;
+		};
+
+		vm.showActive = function() {
+			vm.status = false;
+		};
+
+		vm.showCompleted = function() {
+			vm.status = true;
+		};
 	}
 
 })(angular);
