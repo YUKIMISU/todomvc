@@ -15,6 +15,7 @@
       <h1>todos</h1>
 
       <!-- 在form表单中按回车键，会触发form表单的 submit 事件！！！ -->
+      <!-- 注意：form表单元素的 action 属性不能有，如果有会进行默认提交 -->
       <form ng-submit="add()">
         <!-- 给文本框绑定 taskName  -->
         <input class="new-todo" ng-model="taskName" placeholder="What needs to be done?" autofocus>
@@ -62,7 +63,7 @@
         </li>
       </ul>
       <!-- Hidden if no completed items are left ↓ -->
-      <button class="clear-completed" ng-click="clearCompleted()">Clear completed</button>
+      <button class="clear-completed" ng-click="clearCompleted()" ng-show="isShow()">Clear completed</button>
     </footer>
   </section>
   <footer class="info">
