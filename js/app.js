@@ -2,28 +2,21 @@
 	'use strict';
 
 	angular
-		// 创建模块
-		.module('todoApp', [])
+		// 创建模块， 将服务模块作为当前主模块的依赖项
+		.module('todoApp', ['todoApp.service'])
 		// 创建控制器
-		.controller('TodoController', ['$scope', '$location', TodoController]);
+		.controller('TodoController', ['$scope', '$location', 'TodoService', TodoController]);
 
 
 	// 控制器函数
-	function TodoController($scope, $location) {
-		var vm = $scope; // vm 就是视图模型
-		// 代码写在此处！
+	function TodoController($scope, $location, TodoService) {
+		// 任务：将所有与数据相关的操作，全部移动到 service 中
+		// 			控制器只调用 service 中的方法!!!
 
-		// 1 展示任务列表
-		// 根据视图，抽象数据结构
-		// 	id 用来确定唯一一条数据
-		//  name 表示当前任务名称
-		//  isCompleted 表示当前任务是否完成
-		var todoList = [
-			{ id: 1, name: '抽烟', isCompleted: false },
-			{ id: 2, name: '喝酒', isCompleted: false },
-			{ id: 3, name: '烫头', isCompleted: true },
-		];
+		var vm = $scope; // vm 就是视图模型
+		
 		// 给view提供数据
+		var todoList = TodoService.getData();
 		vm.todoList = todoList;
 
 		// 2 添加任务
@@ -36,17 +29,9 @@
 				return;
 			}
 
-			// 处理id
-			var id;
-			if (todoList.length === 0) {
-				// 如果数组中没有数据，那么，id就是1
-				id = 1;
-			} else {
-				// 思路：获取到数组最后一项的id，再加1就是当前要添加的id
-				id = todoList[todoList.length - 1].id + 1;
-			}
-
-			todoList.push({ id: id, name: vm.taskName, isCompleted: false });
+			// 调用数据添加方法
+			TodoService.addData( vm.taskName );
+			
 			// 清空文本框（清空 taskName 属性的值）
 			vm.taskName = '';
 		};
